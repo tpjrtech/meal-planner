@@ -1,0 +1,13 @@
+
+[
+    {
+        "name": "Spaghetti Bolognese",
+        "ingredients": ["spaghetti", "ground beef", "tomato sauce"],
+        "instructions": "Cook spaghetti. Brown ground beef. Add tomato sauce."
+    },
+    {
+        "name": "Chicken Salad",
+        "ingredients": ["chicken", "lettuce", "tomatoes", "cucumber"],
+        "instructions": "Cook chicken. Chop vegetables. Mix together."
+    }
+]
