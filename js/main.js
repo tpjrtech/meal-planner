@@ -63,11 +63,11 @@ function animateProgressBar() {
     
     const interval = setInterval(() => {
         if (width >= 100) {
-            width = 0; // Reset to loop
+            clearInterval(interval); // Stop the animation when it reaches 100%
         } else {
             width++;
+            progressBar.style.width = width + '%';
+            progressBar.textContent = width + '%';
         }
-        progressBar.style.width = width + '%';
-        progressBar.textContent = width + '%';
     }, 100); // Adjust the speed as necessary
 }
