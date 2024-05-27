@@ -1,6 +1,13 @@
 document.getElementById('generateMealPlanButton').addEventListener('click', async () => {
+    const startDate = document.getElementById('startDateInput').value;
     const ingredients = document.getElementById('ingredientsInput').value;
-    const events = document.getElementById('eventsInput').value;
+    
+    const eventElements = document.querySelectorAll('.event');
+    const events = Array.from(eventElements).map(eventElement => {
+        const date = eventElement.querySelector('.eventDate').value;
+        const description = eventElement.querySelector('.eventDescription').value;
+        return `${date}: ${description}`;
+    }).join(', ');
 
     document.getElementById('mealPlanOutput').innerHTML = '';
     document.getElementById('scheduleOutput').innerHTML = '';
@@ -14,7 +21,7 @@ document.getElementById('generateMealPlanButton').addEventListener('click', asyn
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ ingredients, events })
+            body: JSON.stringify({ startDate, ingredients, events })
         });
 
         if (!response.ok) {
@@ -31,6 +38,17 @@ document.getElementById('generateMealPlanButton').addEventListener('click', asyn
     } finally {
         document.getElementById('progressBarContainer').style.display = 'none';
     }
+});
+
+document.getElementById('addEventButton').addEventListener('click', () => {
+    const eventsContainer = document.getElementById('eventsContainer');
+    const newEvent = document.createElement('div');
+    newEvent.classList.add('event');
+    newEvent.innerHTML = `
+        <input type="date" class="eventDate" placeholder="Event date">
+        <input type="text" class="eventDescription" placeholder="Event description">
+    `;
+    eventsContainer.appendChild(newEvent);
 });
 
 function formatText(text) {
@@ -51,5 +69,4 @@ function animateProgressBar() {
         }
         progressBar.style.width = width + '%';
         progressBar.textContent = width + '%';
-    }, 100); // Adjust the speed as necessary
-}
+    }, 100);
