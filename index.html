@@ -8,11 +8,21 @@
 </head>
 <body>
     <h1>Meal Planner and Schedule Optimizer</h1>
+    
+    <label for="startDateInput">Enter the start date of the week (YYYY-MM-DD):</label>
+    <input type="date" id="startDateInput">
+    
     <label for="ingredientsInput">Enter ingredients:</label>
     <textarea id="ingredientsInput" placeholder="Enter ingredients separated by commas"></textarea>
     
-    <label for="eventsInput">Enter events:</label>
-    <textarea id="eventsInput" placeholder="Enter your events for the week, one per line"></textarea>
+    <div id="eventsContainer">
+        <label for="eventInput">Enter events:</label>
+        <div class="event">
+            <input type="date" class="eventDate" placeholder="Event date">
+            <input type="text" class="eventDescription" placeholder="Event description">
+        </div>
+    </div>
+    <button id="addEventButton">Add another event</button>
     
     <button id="generateMealPlanButton">Generate Meal Plan and Schedule</button>
     
