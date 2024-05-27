@@ -16,11 +16,15 @@ document.getElementById('generateMealPlanButton').addEventListener('click', asyn
         }
 
         const data = await response.json();
-        document.getElementById('mealPlanOutput').innerHTML = `<h2>Meal Plan</h2><pre>${data.mealPlan}</pre>`;
-        document.getElementById('scheduleOutput').innerHTML = `<h2>Schedule</h2><pre>${data.schedule}</pre>`;
+        document.getElementById('mealPlanOutput').innerHTML = `<h2>Meal Plan</h2><div>${formatText(data.mealPlan)}</div>`;
+        document.getElementById('scheduleOutput').innerHTML = `<h2>Schedule</h2><div>${formatText(data.schedule)}</div>`;
     } catch (error) {
         console.error('Error:', error);
         document.getElementById('mealPlanOutput').textContent = 'Error generating meal plan';
         document.getElementById('scheduleOutput').textContent = 'Error generating schedule';
     }
 });
+
+function formatText(text) {
+    return text.replace(/\n/g, '<br>');
+}
