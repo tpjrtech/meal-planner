@@ -38,16 +38,19 @@ button:hover {
     white-space: pre-wrap;
 }
 
-.section {
-    margin-top: 20px;
+.progress-container {
+    width: 100%;
+    background-color: #f3f3f3;
+    border: 1px solid #ddd;
+    margin: 20px 0;
+    display: none; /* Hidden by default */
 }
 
-.section h2 {
-    color: #444;
-}
-
-pre {
-    white-space: pre-wrap;
-    word-wrap: break-word;
-    margin: 0;
+.progress-bar {
+    width: 0;
+    height: 30px;
+    background-color: #5cb85c;
+    text-align: center;
+    line-height: 30px;
+    color: white;
 }
