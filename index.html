@@ -4,13 +4,53 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Meal Planner</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        h1 {
+            color: #333;
+        }
+        input, textarea, button {
+            display: block;
+            margin: 10px 0;
+            padding: 10px;
+            width: 100%;
+            max-width: 400px;
+            box-sizing: border-box;
+        }
+        button {
+            background-color: #5cb85c;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #4cae4c;
+        }
+        #mealPlanOutput, #scheduleOutput {
+            margin-top: 20px;
+            padding: 10px;
+            background-color: white;
+            border: 1px solid #ddd;
+        }
+    </style>
 </head>
 <body>
     <h1>Meal Planner</h1>
-    <input type="text" id="ingredientsInput" placeholder="Enter ingredients">
-    <button id="generateMealPlanButton">Generate Meal Plan</button>
+    <label for="ingredientsInput">Enter ingredients:</label>
+    <textarea id="ingredientsInput" placeholder="Enter ingredients separated by commas"></textarea>
+    
+    <label for="eventsInput">Enter events:</label>
+    <textarea id="eventsInput" placeholder="Enter your events for the week, one per line"></textarea>
+    
+    <button id="generateMealPlanButton">Generate Meal Plan and Schedule</button>
+    
     <div id="mealPlanOutput"></div>
-
-    <script src="js/main.js"></script> <!-- Ensure this path is correct -->
+    <div id="scheduleOutput"></div>
+    
+    <script src="js/main.js"></script>
 </body>
 </html>
