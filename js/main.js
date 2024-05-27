@@ -14,9 +14,11 @@ document.getElementById('generateMealPlanButton').addEventListener('click', asyn
     document.getElementById('scheduleOutput').innerHTML = '';
     document.getElementById('progressBarContainer').style.display = 'block';
     document.getElementById('progressBar').style.width = '0%';
-    animateProgressBar();
 
+    let progressBarInterval;
     try {
+        progressBarInterval = setInterval(animateProgressBar, 100); // Start the progress bar animation
+
         const response = await fetch('https://098f3fdb-7f1f-4cf2-acfb-621edcf9b6bb-00-15r2s5k1tn8tr.janeway.replit.dev/generate-meal-plan', {
             method: 'POST',
             headers: {
@@ -38,6 +40,7 @@ document.getElementById('generateMealPlanButton').addEventListener('click', asyn
         document.getElementById('mealPlanOutput').textContent = 'Error generating meal plan';
         document.getElementById('scheduleOutput').textContent = 'Error generating schedule';
     } finally {
+        clearInterval(progressBarInterval); // Stop the progress bar animation
         document.getElementById('progressBarContainer').style.display = 'none';
     }
 });
@@ -61,9 +64,11 @@ document.getElementById('refineOutputButton').addEventListener('click', async ()
     document.getElementById('scheduleOutput').innerHTML = '';
     document.getElementById('progressBarContainer').style.display = 'block';
     document.getElementById('progressBar').style.width = '0%';
-    animateProgressBar();
 
+    let progressBarInterval;
     try {
+        progressBarInterval = setInterval(animateProgressBar, 100); // Start the progress bar animation
+
         const response = await fetch('https://098f3fdb-7f1f-4cf2-acfb-621edcf9b6bb-00-15r2s5k1tn8tr.janeway.replit.dev/refine-output', {
             method: 'POST',
             headers: {
@@ -84,6 +89,7 @@ document.getElementById('refineOutputButton').addEventListener('click', async ()
         document.getElementById('mealPlanOutput').textContent = 'Error refining meal plan';
         document.getElementById('scheduleOutput').textContent = 'Error refining schedule';
     } finally {
+        clearInterval(progressBarInterval); // Stop the progress bar animation
         document.getElementById('progressBarContainer').style.display = 'none';
     }
 });
@@ -94,17 +100,11 @@ function formatText(text) {
 
 function animateProgressBar() {
     const progressBar = document.getElementById('progressBar');
-    let width = 0;
-    progressBar.style.width = width + '%';
-    progressBar.textContent = width + '%';
-    
-    const interval = setInterval(() => {
-        if (width >= 100) {
-            clearInterval(interval); // Stop the animation when it reaches 100%
-        } else {
-            width++;
-            progressBar.style.width = width + '%';
-            progressBar.textContent = width + '%';
-        }
-    }, 100); // Adjust the speed as necessary
+    let width = parseInt(progressBar.style.width);
+    if (isNaN(width)) width = 0;
+    if (width < 100) {
+        width++;
+        progressBar.style.width = width + '%';
+        progressBar.textContent = width + '%';
+    }
 }
