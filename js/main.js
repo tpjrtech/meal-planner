@@ -69,4 +69,5 @@ function animateProgressBar() {
         }
         progressBar.style.width = width + '%';
         progressBar.textContent = width + '%';
-    }, 100);
+    }, 100); // Adjust the speed as necessary
+}
