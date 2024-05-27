@@ -17,4 +17,14 @@ document.getElementById('generateMealPlanButton').addEventListener('click', asyn
 
         const data = await response.json();
         document.getElementById('mealPlanOutput').innerHTML = `<h2>Meal Plan</h2><pre>${formatText(data.mealPlan)}</pre>`;
-        document
+        document.getElementById('scheduleOutput').innerHTML = `<h2>Schedule</h2><pre>${formatText(data.schedule)}</pre>`;
+    } catch (error) {
+        console.error('Error:', error);
+        document.getElementById('mealPlanOutput').textContent = 'Error generating meal plan';
+        document.getElementById('scheduleOutput').textContent = 'Error generating schedule';
+    }
+});
+
+function formatText(text) {
+    return text.replace(/\n/g, '<br>');
+}
