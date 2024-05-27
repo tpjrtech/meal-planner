@@ -31,6 +31,7 @@ document.getElementById('generateMealPlanButton').addEventListener('click', asyn
         const data = await response.json();
         document.getElementById('mealPlanOutput').innerHTML = `<h2>Meal Plan</h2><pre>${formatText(data.mealPlan)}</pre>`;
         document.getElementById('scheduleOutput').innerHTML = `<h2>Schedule</h2><pre>${formatText(data.schedule)}</pre>`;
+        document.getElementById('refineOutputButton').style.display = 'inline';
     } catch (error) {
         console.error('Error:', error);
         document.getElementById('mealPlanOutput').textContent = 'Error generating meal plan';
@@ -49,6 +50,41 @@ document.getElementById('addEventButton').addEventListener('click', () => {
         <input type="text" class="eventDescription" placeholder="Event description">
     `;
     eventsContainer.appendChild(newEvent);
+});
+
+document.getElementById('refineOutputButton').addEventListener('click', async () => {
+    const mealPlan = document.getElementById('mealPlanOutput').innerText;
+    const schedule = document.getElementById('scheduleOutput').innerText;
+
+    document.getElementById('mealPlanOutput').innerHTML = '';
+    document.getElementById('scheduleOutput').innerHTML = '';
+    document.getElementById('progressBarContainer').style.display = 'block';
+    document.getElementById('progressBar').style.width = '0%';
+    animateProgressBar();
+
+    try {
+        const response = await fetch('https://098f3fdb-7f1f-4cf2-acfb-621edcf9b6bb-00-15r2s5k1tn8tr.janeway.replit.dev/refine-output', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ mealPlan, schedule })
+        });
+
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+
+        const data = await response.json();
+        document.getElementById('mealPlanOutput').innerHTML = `<h2>Refined Meal Plan</h2><pre>${formatText(data.mealPlan)}</pre>`;
+        document.getElementById('scheduleOutput').innerHTML = `<h2>Refined Schedule</h2><pre>${formatText(data.schedule)}</pre>`;
+    } catch (error) {
+        console.error('Error:', error);
+        document.getElementById('mealPlanOutput').textContent = 'Error refining meal plan';
+        document.getElementById('scheduleOutput').textContent = 'Error refining schedule';
+    } finally {
+        document.getElementById('progressBarContainer').style.display = 'none';
+    }
 });
 
 function formatText(text) {
