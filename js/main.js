@@ -1,5 +1,6 @@
 document.getElementById('generateMealPlanButton').addEventListener('click', async () => {
     const startDate = document.getElementById('startDateInput').value;
+    const startTime = document.getElementById('startTimeInput').value;
     const ingredients = document.getElementById('ingredientsInput').value;
     
     const eventElements = document.querySelectorAll('.event');
@@ -21,7 +22,7 @@ document.getElementById('generateMealPlanButton').addEventListener('click', asyn
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ startDate, ingredients, events })
+            body: JSON.stringify({ startDate, startTime, ingredients, events })
         });
 
         if (!response.ok) {
