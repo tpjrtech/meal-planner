@@ -40,13 +40,16 @@ function formatText(text) {
 function animateProgressBar() {
     const progressBar = document.getElementById('progressBar');
     let width = 0;
+    progressBar.style.width = width + '%';
+    progressBar.textContent = width + '%';
+    
     const interval = setInterval(() => {
         if (width >= 100) {
-            clearInterval(interval);
+            width = 0; // Reset to loop
         } else {
             width++;
-            progressBar.style.width = width + '%';
-            progressBar.textContent = width + '%';
         }
-    }, 50); // Adjust the speed as necessary
+        progressBar.style.width = width + '%';
+        progressBar.textContent = width + '%';
+    }, 100); // Adjust the speed as necessary
 }
