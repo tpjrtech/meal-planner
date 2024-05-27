@@ -1,9 +1,4 @@
 
-const axios = require('axios');
-require('dotenv').config();
-
-const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
-
 document.addEventListener('DOMContentLoaded', async () => {
     const inventoryForm = document.getElementById('inventoryForm');
     const inventoryDiv = document.getElementById('inventory');
@@ -11,8 +6,10 @@ document.addEventListener('DOMContentLoaded', async () => {
     const mealPlanDiv = document.getElementById('mealPlan');
     const generateMealPlanButton = document.getElementById('generateMealPlan');
 
+    // Load inventory from localStorage or initialize an empty array
     let inventory = JSON.parse(localStorage.getItem('inventory')) || [];
 
+    // Fetch recipes from the JSON file
     async function fetchRecipes() {
         try {
             const response = await fetch('data/recipes.json');
@@ -28,6 +25,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     let recipes = await fetchRecipes();
 
+    // Function to render the inventory list
     function renderInventory() {
         inventoryDiv.innerHTML = '';
         inventory.forEach((item, index) => {
@@ -41,6 +39,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         });
     }
 
+    // Function to render the recipes list
     function renderRecipes() {
         recipesDiv.innerHTML = '';
         recipes.forEach(recipe => {
@@ -55,35 +54,31 @@ document.addEventListener('DOMContentLoaded', async () => {
         });
     }
 
+    // Function to generate a meal plan using the backend server
     async function generateMealPlanUsingAI() {
         try {
             const availableIngredients = inventory.map(item => item.name).join(', ');
-            const prompt = `Given the following available ingredients: ${availableIngredients}, suggest a weekly meal plan including recipes.`;
-
-            const response = await axios.post(
-                'https://api.openai.com/v1/engines/davinci-codex/completions',
-                {
-                    prompt: prompt,
-                    max_tokens: 150,
-                    n: 1,
-                    stop: null,
-                    temperature: 0.7,
+            const response = await fetch('http://localhost:3000/generate-meal-plan', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
                 },
-                {
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${OPENAI_API_KEY}`,
-                    },
-                }
-            );
+                body: JSON.stringify({ ingredients: availableIngredients }),
+            });
 
-            const aiMealPlan = response.data.choices[0].text.trim();
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+
+            const data = await response.json();
+            const aiMealPlan = data.mealPlan;
             mealPlanDiv.innerHTML = `<h3>AI Generated Meal Plan</h3><p>${aiMealPlan.replace(/\n/g, '<br>')}</p>`;
         } catch (error) {
-            console.error('Error calling OpenAI API:', error);
+            console.error('Error calling backend server:', error);
         }
     }
 
+    // Function to render the meal plan based on available inventory and recipes
     function renderMealPlan() {
         mealPlanDiv.innerHTML = '';
         const availableRecipes = recipes.filter(recipe => 
@@ -103,6 +98,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         });
     }
 
+    // Event listener for the inventory form submission
     inventoryForm.addEventListener('submit', e => {
         e.preventDefault();
         const itemName = document.getElementById('itemName').value;
@@ -110,15 +106,19 @@ document.addEventListener('DOMContentLoaded', async () => {
         const itemExpiration = document.getElementById('itemExpiration').value;
         const newItem = { name: itemName, quantity: itemQuantity, expiration: itemExpiration };
         
+        // Add new item to inventory and save to localStorage
         inventory.push(newItem);
         localStorage.setItem('inventory', JSON.stringify(inventory));
         
+        // Re-render the inventory and meal plan
         renderInventory();
         renderMealPlan();
         
+        // Reset the form
         inventoryForm.reset();
     });
 
+    // Function to remove an item from the inventory
     window.removeItem = function(index) {
         inventory.splice(index, 1);
         localStorage.setItem('inventory', JSON.stringify(inventory));
@@ -126,8 +126,10 @@ document.addEventListener('DOMContentLoaded', async () => {
         renderMealPlan();
     };
 
+    // Event listener for the AI meal plan button
     generateMealPlanButton.addEventListener('click', generateMealPlanUsingAI);
 
+    // Initial rendering of inventory, recipes, and meal plan
     renderInventory();
     renderRecipes();
     renderMealPlan();
